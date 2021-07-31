@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CCMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ACCOUNT">
+          <Key>
+            <PropertyRef Name="USERNAME" />
+          </Key>
+          <Property Name="USERNAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="USER_PASSWORD" Type="ntext" />
+        </EntityType>
+        <EntityType Name="BILL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="GUEST" Type="nvarchar" MaxLength="50" />
+          <Property Name="QUANTITY" Type="int" />
+          <Property Name="TOTAL" Type="int" />
+          <Property Name="BILL_STATUS" Type="ntext" />
+          <Property Name="IS_APPROVED" Type="bit" />
+        </EntityType>
+        <EntityType Name="CART">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BILL" Type="nvarchar" MaxLength="50" />
+          <Property Name="PRODUCT" Type="nvarchar" MaxLength="50" />
+          <Property Name="PRODUCT_NAME" Type="ntext" />
+          <Property Name="QUANTITY" Type="int" />
+          <Property Name="PRICE" Type="int" />
+        </EntityType>
+        <EntityType Name="GUEST_INFO">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="GUEST_NAME" Type="ntext" />
+          <Property Name="GUEST_ADDRESS" Type="ntext" />
+          <Property Name="PHONE" Type="ntext" />
+        </EntityType>
+        <EntityType Name="PRODUCT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PRODUCT_NAME" Type="ntext" />
+          <Property Name="PRODUCT_TYPE" Type="nvarchar" MaxLength="50" />
+          <Property Name="BRAND" Type="ntext" />
+          <Property Name="MANUFRACTURING_DATE" Type="datetime" />
+          <Property Name="QUARANTY" Type="int" />
+          <Property Name="REMAINING" Type="int" />
+          <Property Name="PRICE" Type="int" />
+        </EntityType>
+        <EntityType Name="PRODUCT_TYPE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NAME" Type="ntext" />
+        </EntityType>
+        <EntityType Name="TEMP_CART">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRODUCT" Type="nvarchar" MaxLength="50" />
+          <Property Name="PRODUCT_NAME" Type="ntext" />
+          <Property Name="QUANTITY" Type="int" />
+          <Property Name="PRICE" Type="int" />
+        </EntityType>
+        <EntityType Name="WISHLIST">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRODUCT" Type="nvarchar" MaxLength="50" />
+          <Property Name="PRODUCT_NAME" Type="ntext" />
+          <Property Name="PRICE" Type="int" />
+        </EntityType>
+        <Association Name="FK_BILL">
+          <End Role="BILL" Type="Self.BILL" Multiplicity="0..1" />
+          <End Role="CART" Type="Self.CART" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BILL">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CART">
+              <PropertyRef Name="BILL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GUEST">
+          <End Role="GUEST_INFO" Type="Self.GUEST_INFO" Multiplicity="0..1" />
+          <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GUEST_INFO">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BILL">
+              <PropertyRef Name="GUEST" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1" />
+          <End Role="CART" Type="Self.CART" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CART">
+              <PropertyRef Name="PRODUCT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT_TYPE">
+          <End Role="PRODUCT_TYPE" Type="Self.PRODUCT_TYPE" Multiplicity="0..1" />
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT_TYPE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT">
+              <PropertyRef Name="PRODUCT_TYPE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CCMModelStoreContainer">
+          <EntitySet Name="ACCOUNT" EntityType="Self.ACCOUNT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BILL" EntityType="Self.BILL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CART" EntityType="Self.CART" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GUEST_INFO" EntityType="Self.GUEST_INFO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCT" EntityType="Self.PRODUCT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCT_TYPE" EntityType="Self.PRODUCT_TYPE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TEMP_CART" EntityType="Self.TEMP_CART" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WISHLIST" EntityType="Self.WISHLIST" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BILL" Association="Self.FK_BILL">
+            <End Role="BILL" EntitySet="BILL" />
+            <End Role="CART" EntitySet="CART" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GUEST" Association="Self.FK_GUEST">
+            <End Role="GUEST_INFO" EntitySet="GUEST_INFO" />
+            <End Role="BILL" EntitySet="BILL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT" Association="Self.FK_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCT" />
+            <End Role="CART" EntitySet="CART" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT_TYPE" Association="Self.FK_PRODUCT_TYPE">
+            <End Role="PRODUCT_TYPE" EntitySet="PRODUCT_TYPE" />
+            <End Role="PRODUCT" EntitySet="PRODUCT" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CCMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ACCOUNT">
+          <Key>
+            <PropertyRef Name="USERNAME" />
+          </Key>
+          <Property Name="USERNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="USER_PASSWORD" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BILL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GUEST" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QUANTITY" Type="Int32" />
+          <Property Name="TOTAL" Type="Int32" />
+          <Property Name="BILL_STATUS" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IS_APPROVED" Type="Boolean" />
+          <NavigationProperty Name="CARTs" Relationship="Self.FK_BILL" FromRole="BILL" ToRole="CART" />
+          <NavigationProperty Name="GUEST_INFO" Relationship="Self.FK_GUEST" FromRole="BILL" ToRole="GUEST_INFO" />
+        </EntityType>
+        <EntityType Name="CART">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BILL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PRODUCT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PRODUCT_NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="QUANTITY" Type="Int32" />
+          <Property Name="PRICE" Type="Int32" />
+          <NavigationProperty Name="BILL1" Relationship="Self.FK_BILL" FromRole="CART" ToRole="BILL" />
+          <NavigationProperty Name="PRODUCT1" Relationship="Self.FK_PRODUCT" FromRole="CART" ToRole="PRODUCT" />
+        </EntityType>
+        <EntityType Name="GUEST_INFO">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GUEST_NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GUEST_ADDRESS" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PHONE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BILLs" Relationship="Self.FK_GUEST" FromRole="GUEST_INFO" ToRole="BILL" />
+        </EntityType>
+        <EntityType Name="PRODUCT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PRODUCT_NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PRODUCT_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BRAND" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MANUFRACTURING_DATE" Type="DateTime" Precision="3" />
+          <Property Name="QUARANTY" Type="Int32" />
+          <Property Name="REMAINING" Type="Int32" />
+          <Property Name="PRICE" Type="Int32" />
+          <NavigationProperty Name="CARTs" Relationship="Self.FK_PRODUCT" FromRole="PRODUCT" ToRole="CART" />
+          <NavigationProperty Name="PRODUCT_TYPE1" Relationship="Self.FK_PRODUCT_TYPE" FromRole="PRODUCT" ToRole="PRODUCT_TYPE" />
+        </EntityType>
+        <EntityType Name="PRODUCT_TYPE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PRODUCTs" Relationship="Self.FK_PRODUCT_TYPE" FromRole="PRODUCT_TYPE" ToRole="PRODUCT" />
+        </EntityType>
+        <EntityType Name="TEMP_CART">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRODUCT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PRODUCT_NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="QUANTITY" Type="Int32" />
+          <Property Name="PRICE" Type="Int32" />
+        </EntityType>
+        <EntityType Name="WISHLIST">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRODUCT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PRODUCT_NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PRICE" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_BILL">
+          <End Role="BILL" Type="Self.BILL" Multiplicity="0..1" />
+          <End Role="CART" Type="Self.CART" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BILL">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CART">
+              <PropertyRef Name="BILL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GUEST">
+          <End Role="GUEST_INFO" Type="Self.GUEST_INFO" Multiplicity="0..1" />
+          <End Role="BILL" Type="Self.BILL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GUEST_INFO">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BILL">
+              <PropertyRef Name="GUEST" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1" />
+          <End Role="CART" Type="Self.CART" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CART">
+              <PropertyRef Name="PRODUCT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT_TYPE">
+          <End Role="PRODUCT_TYPE" Type="Self.PRODUCT_TYPE" Multiplicity="0..1" />
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT_TYPE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT">
+              <PropertyRef Name="PRODUCT_TYPE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CCMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ACCOUNTs" EntityType="Self.ACCOUNT" />
+          <EntitySet Name="BILLs" EntityType="Self.BILL" />
+          <EntitySet Name="CARTs" EntityType="Self.CART" />
+          <EntitySet Name="GUEST_INFO" EntityType="Self.GUEST_INFO" />
+          <EntitySet Name="PRODUCTs" EntityType="Self.PRODUCT" />
+          <EntitySet Name="PRODUCT_TYPE" EntityType="Self.PRODUCT_TYPE" />
+          <EntitySet Name="TEMP_CART" EntityType="Self.TEMP_CART" />
+          <EntitySet Name="WISHLISTs" EntityType="Self.WISHLIST" />
+          <AssociationSet Name="FK_BILL" Association="Self.FK_BILL">
+            <End Role="BILL" EntitySet="BILLs" />
+            <End Role="CART" EntitySet="CARTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GUEST" Association="Self.FK_GUEST">
+            <End Role="GUEST_INFO" EntitySet="GUEST_INFO" />
+            <End Role="BILL" EntitySet="BILLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT" Association="Self.FK_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCTs" />
+            <End Role="CART" EntitySet="CARTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT_TYPE" Association="Self.FK_PRODUCT_TYPE">
+            <End Role="PRODUCT_TYPE" EntitySet="PRODUCT_TYPE" />
+            <End Role="PRODUCT" EntitySet="PRODUCTs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CCMModelStoreContainer" CdmEntityContainer="CCMEntities">
+          <EntitySetMapping Name="ACCOUNTs">
+            <EntityTypeMapping TypeName="CCMModel.ACCOUNT">
+              <MappingFragment StoreEntitySet="ACCOUNT">
+                <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
+                <ScalarProperty Name="USER_PASSWORD" ColumnName="USER_PASSWORD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BILLs">
+            <EntityTypeMapping TypeName="CCMModel.BILL">
+              <MappingFragment StoreEntitySet="BILL">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GUEST" ColumnName="GUEST" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+                <ScalarProperty Name="BILL_STATUS" ColumnName="BILL_STATUS" />
+                <ScalarProperty Name="IS_APPROVED" ColumnName="IS_APPROVED" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CARTs">
+            <EntityTypeMapping TypeName="CCMModel.CART">
+              <MappingFragment StoreEntitySet="CART">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BILL" ColumnName="BILL" />
+                <ScalarProperty Name="PRODUCT" ColumnName="PRODUCT" />
+                <ScalarProperty Name="PRODUCT_NAME" ColumnName="PRODUCT_NAME" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="PRICE" ColumnName="PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GUEST_INFO">
+            <EntityTypeMapping TypeName="CCMModel.GUEST_INFO">
+              <MappingFragment StoreEntitySet="GUEST_INFO">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GUEST_NAME" ColumnName="GUEST_NAME" />
+                <ScalarProperty Name="GUEST_ADDRESS" ColumnName="GUEST_ADDRESS" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTs">
+            <EntityTypeMapping TypeName="CCMModel.PRODUCT">
+              <MappingFragment StoreEntitySet="PRODUCT">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PRODUCT_NAME" ColumnName="PRODUCT_NAME" />
+                <ScalarProperty Name="PRODUCT_TYPE" ColumnName="PRODUCT_TYPE" />
+                <ScalarProperty Name="BRAND" ColumnName="BRAND" />
+                <ScalarProperty Name="MANUFRACTURING_DATE" ColumnName="MANUFRACTURING_DATE" />
+                <ScalarProperty Name="QUARANTY" ColumnName="QUARANTY" />
+                <ScalarProperty Name="REMAINING" ColumnName="REMAINING" />
+                <ScalarProperty Name="PRICE" ColumnName="PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCT_TYPE">
+            <EntityTypeMapping TypeName="CCMModel.PRODUCT_TYPE">
+              <MappingFragment StoreEntitySet="PRODUCT_TYPE">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TEMP_CART">
+            <EntityTypeMapping TypeName="CCMModel.TEMP_CART">
+              <MappingFragment StoreEntitySet="TEMP_CART">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PRODUCT" ColumnName="PRODUCT" />
+                <ScalarProperty Name="PRODUCT_NAME" ColumnName="PRODUCT_NAME" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="PRICE" ColumnName="PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WISHLISTs">
+            <EntityTypeMapping TypeName="CCMModel.WISHLIST">
+              <MappingFragment StoreEntitySet="WISHLIST">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PRODUCT" ColumnName="PRODUCT" />
+                <ScalarProperty Name="PRODUCT_NAME" ColumnName="PRODUCT_NAME" />
+                <ScalarProperty Name="PRICE" ColumnName="PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
