@@ -1,5 +1,2 @@
-# Sophomore and Junior Project
+# Computer hardware shop desktop application
 
-## Using Winform
-
-### Practicing design pattern (Abtract factory)
